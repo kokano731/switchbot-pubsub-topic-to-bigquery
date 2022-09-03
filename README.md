@@ -2,7 +2,7 @@
 
 ## 概要
 
-湿度情報をPub/Subにpublishし、Dataflowによるストリーミング処理でBigQueryに挿入するパイプラインを作成する。
+温度情報をPub/Subにpublishし、Dataflowによるストリーミング処理でBigQueryに挿入するパイプラインを作成する。
 
 Dataflowは、Pub/Sub Topic to BigQueryテンプレートを使用する。
 
