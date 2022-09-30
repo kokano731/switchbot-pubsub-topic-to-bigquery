@@ -42,7 +42,8 @@ $ bq mk --dataset --location=us streaming
 ```
 $ bq query --use_legacy_sql=false \
 'CREATE TABLE `streaming.switchbot-meter`
-(exec_time TIMESTAMP NOT NULL,
+(id STRING NOT NULL,
+ exec_time TIMESTAMP NOT NULL,
  device_name STRING NOT NULL,
  temperature FLOAT64 NOT NULL,
  humidity INT64 NOT NULL,
@@ -78,18 +79,18 @@ $ gcloud dataflow jobs run switchbot-meter-dataflow-pubsub-bigquery --gcs-locati
 温度情報をJSONフォーマットでPub/Subトピックに送信。
 
 ```
-$ gcloud pubsub topics publish myTopic --message '{"exec_time":"2022-07-30 10:30:00", "device_name":"south_room", "temperature":28.0, "humidity":57, "dt":"2022-07-30"}'
+$ gcloud pubsub topics publish myTopic --message '{"id":"9379b661", "exec_time":"2022-09-30 21:30:00", "device_name":"south_room", "temperature":27.0, "humidity":65, "dt":"2022-09-30"}'
 ```
 
 ### BigQueryのテーブルに挿入されたことを確認
 
 ```
-$ bq query --use_legacy_sql=false 'SELECT * FROM `switch-bot-320517.streaming.switchbot-meter` WHERE dt = "2022-07-30"'
-+---------------------+-------------+-------------+----------+------------+
-|      exec_time      | device_name | temperature | humidity |     dt     |
-+---------------------+-------------+-------------+----------+------------+
-| 2022-07-30 10:30:00 | south_room  |        28.0 |       57 | 2022-07-30 |
-+---------------------+-------------+-------------+----------+------------+
+$ bq query --use_legacy_sql=false 'SELECT * FROM `switch-bot-320517.streaming.switchbot-meter` WHERE dt = "2022-09-30"'
++----------+---------------------+-------------+-------------+----------+------------+
+|    id    |      exec_time      | device_name | temperature | humidity |     dt     |
++----------+---------------------+-------------+-------------+----------+------------+
+| 9379b661 | 2022-09-30 21:30:00 | south_room  |        27.0 |       65 | 2022-09-30 |
++----------+---------------------+-------------+-------------+----------+------------+
 ```
 
 ## ソースコードからDataflowのテンプレートを作成して実行
